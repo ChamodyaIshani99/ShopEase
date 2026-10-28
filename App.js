@@ -6,9 +6,15 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { store, loadPersistedState, startPersisting } from './src/store';
 import AppNavigator from './src/navigation/AppNavigator';
 import useTheme from './src/hooks/useTheme';
+import { setupNotifications } from './src/utils/notifications';
 
 function Root() {
   const { isDark } = useTheme();
+
+  useEffect(() => {
+    setupNotifications();
+  }, []);
+  
   return (
     <>
       <StatusBar style={isDark ? 'light' : 'dark'} />

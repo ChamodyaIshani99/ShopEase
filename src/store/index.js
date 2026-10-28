@@ -10,8 +10,19 @@ const STORAGE_KEY = 'shopease_state_v1';
 
 const combined = combineReducers({ cart, wishlist, auth, orders, theme });
 
-const rootReducer = (state, action) =>
-  action.type === 'HYDRATE' ? { ...state, ...action.payload } : combined(state, action);
+const rootReducer = (state, action) => {
+  if (action.type === 'HYDRATE') {
+    // Start from each slice's default state, then overlay saved data,
+    // so missing fields (like auth.users) always exist.
+    const fresh = combined(undefined, { type: '@@INIT' });
+    const merged = {};
+    Object.keys(fresh).forEach((key) => {
+      merged[key] = { ...fresh[key], ...(action.payload?.[key] || {}) };
+    });
+    return merged;
+  }
+  return combined(state, action);
+};
 
 export const store = configureStore({ reducer: rootReducer });
 

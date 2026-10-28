@@ -1,30 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  user: null,
-  accessToken: null,
-};
-
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: { user: null, users: [] },
   reducers: {
-    setCredentials(state, action) {
-      const { user, accessToken } = action.payload;
-      state.user = user;
-      state.accessToken = accessToken;
+    register: (state, { payload }) => {
+      // payload: { name, email, password }
+      state.users.push(payload);
+      state.user = { name: payload.name, email: payload.email };
     },
-    updateUser(state, action) {
-      state.user = { ...state.user, ...action.payload };
+    login: (state, { payload }) => {
+      // payload: { email }
+      const u = state.users.find((x) => x.email === payload.email);
+      if (u) state.user = { name: u.name, email: u.email, address: u.address };
     },
-    signOut() {
-      return initialState;
+    saveAddress: (state, { payload }) => {
+      if (!state.user) return;
+      state.user.address = payload;
+      const u = state.users.find((x) => x.email === state.user.email);
+      if (u) u.address = payload;
+    },
+    logout: (state) => {
+      state.user = null;
     },
   },
 });
 
-export const { setCredentials, updateUser, signOut } = authSlice.actions;
-export const selectCurrentUser = (state) => state.auth.user;
-export const selectAccessToken = (state) => state.auth.accessToken;
-export const selectIsAuthenticated = (state) => Boolean(state.auth.accessToken);
+export const { register, login, saveAddress, logout } = authSlice.actions;
 export default authSlice.reducer;
