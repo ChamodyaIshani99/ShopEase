@@ -5,10 +5,11 @@ import wishlist from './wishlistSlice';
 import auth from './authSlice';
 import orders from './ordersSlice';
 import theme from './themeSlice';
+import products from './productsSlice';
 
 const STORAGE_KEY = 'shopease_state_v1';
 
-const combined = combineReducers({ cart, wishlist, auth, orders, theme });
+const combined = combineReducers({ cart, wishlist, auth, orders, theme, products });
 
 const rootReducer = (state, action) => {
   if (action.type === 'HYDRATE') {

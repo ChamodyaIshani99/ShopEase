@@ -14,9 +14,10 @@ import { fetchProducts, fetchCategories } from '../api/products';
 export default function HomeScreen({ navigation }) {
   const { colors } = useTheme();
   const user = useSelector((s) => s.auth.user);
+  const custom = useSelector((s) => s.products.custom);
 
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(['all']);
+  const [apiCategories, setApiCategories] = useState([]);
   const [selected, setSelected] = useState('all');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ export default function HomeScreen({ navigation }) {
       setError(null);
       const [p, c] = await Promise.all([fetchProducts(), fetchCategories()]);
       setProducts(p);
-      setCategories(['all', ...c]);
+      setApiCategories(c);
     } catch (e) {
       setError('Could not load products. Check your internet connection.');
     } finally {
@@ -40,14 +41,21 @@ export default function HomeScreen({ navigation }) {
     load();
   }, [load]);
 
+  const allProducts = useMemo(() => [...custom, ...products], [custom, products]);
+
+  const categories = useMemo(
+    () => ['all', ...Array.from(new Set([...apiCategories, ...custom.map((p) => p.category)]))],
+    [apiCategories, custom]
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return products.filter(
+    return allProducts.filter(
       (p) =>
         (selected === 'all' || p.category === selected) &&
         (q === '' || p.title.toLowerCase().includes(q))
     );
-  }, [products, selected, query]);
+  }, [allProducts, selected, query]);
 
   const Banner = (
     <View style={[styles.banner, { backgroundColor: colors.primary }]}>
@@ -100,11 +108,11 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       {/* Content */}
-      {loading ? (
+      {loading && custom.length === 0 ? (
         <View style={styles.center}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
-      ) : error ? (
+      ) : error && custom.length === 0 ? (
         <View style={styles.center}>
           <Ionicons name="cloud-offline-outline" size={48} color={colors.subtext} />
           <Text style={[styles.errorText, { color: colors.subtext }]}>{error}</Text>
@@ -128,8 +136,17 @@ export default function HomeScreen({ navigation }) {
             <View style={{ paddingHorizontal: 16, marginBottom: 14 }}>
               {Banner}
               <Text style={[styles.section, { color: colors.text }]}>
-                {selected === 'all' ? 'Popular products' : selected.charAt(0).toUpperCase() + selected.slice(1)}
+                {selected === 'all'
+                  ? 'Popular products'
+                  : selected.charAt(0).toUpperCase() + selected.slice(1)}
               </Text>
+              {error && (
+                <TouchableOpacity onPress={load} style={{ marginTop: 6 }}>
+                  <Text style={{ color: colors.danger, fontSize: 12 }}>
+                    Could not load store products. Tap to retry.
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           }
           ListEmptyComponent={

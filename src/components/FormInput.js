@@ -21,7 +21,11 @@ export default function FormInput({ label, icon, error, secure, style, ...props 
           {...props}
           secureTextEntry={hidden}
           placeholderTextColor={colors.subtext}
-          style={[styles.input, { color: colors.text }]}
+          style={[
+            styles.input,
+            { color: colors.text },
+            props.multiline && { minHeight: 90, textAlignVertical: 'top', paddingTop: 12 },
+          ]}
         />
         {secure && (
           <TouchableOpacity onPress={() => setHidden((h) => !h)}>
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
   box: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 50,
+    minHeight: 50,
     borderWidth: 1,
     borderRadius: 14,
     paddingHorizontal: 14,
