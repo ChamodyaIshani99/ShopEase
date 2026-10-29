@@ -9,13 +9,13 @@ ShopEase is a full-featured e-commerce mobile app built with **React Native (Exp
 
 | Home | Product Details | Cart |
 |:---:|:---:|:---:|
-| <img src="./screenshots/home.png" width="200" alt="ShopEase Home Screen" /> | <img src="./screenshots/product-details.png" width="200" alt="Product Details Screen" /> | <img src="./screenshots/cart.png" width="200" alt="Shopping Cart Screen" /> |
+| <img src="./screenshots/home.jpeg" width="200" alt="ShopEase Home Screen" /> | <img src="./screenshots/product-details.jpeg" width="200" alt="Product Details Screen" /> | <img src="./screenshots/cart.jpeg" width="200" alt="Shopping Cart Screen" /> |
 
 ### Checkout, Orders & Profile
 
 | Checkout | Orders | Profile (Dark Mode) |
 |:---:|:---:|:---:|
-| <img src="./screenshots/checkout.png" width="200" alt="Checkout Screen" /> | <img src="./screenshots/orders.png" width="200" alt="Orders Screen" /> | <img src="./screenshots/profile-dark.png" width="200" alt="Profile in Dark Mode" /> |
+| <img src="./screenshots/checkout.jpeg" width="200" alt="Checkout Screen" /> | <img src="./screenshots/orders.jpeg" width="200" alt="Orders Screen" /> | <img src="./screenshots/profile-dark.jpeg" width="200" alt="Profile in Dark Mode" /> |
 
 
 ## 🎬 App Demo
